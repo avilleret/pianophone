@@ -1,4 +1,4 @@
-#N canvas 520 322 794 344 10;
+#N canvas 518 327 794 344 10;
 #X text 41 14 very simple polyphonic synth;
 #X obj 67 206 synth;
 #X obj 67 163 r syn-note;
@@ -7,11 +7,12 @@
 #X obj 67 256 out90;
 #X obj 411 105 unpackOSC;
 #X obj 411 126 route /note;
-#X obj 411 209 s syn-noteon;
+#X obj 411 229 s syn-noteon;
 #X obj 411 147 unpack;
-#X obj 411 188 pack;
-#X obj 437 168 * 64;
+#X obj 411 208 pack;
+#X obj 437 188 * 64;
 #X obj 411 84 udpreceive 239.0.0.1 7770;
+#X obj 389 173 - 24;
 #X connect 1 0 5 0;
 #X connect 1 0 5 1;
 #X connect 2 0 1 0;
@@ -19,8 +20,9 @@
 #X connect 4 0 1 2;
 #X connect 6 0 7 0;
 #X connect 7 0 9 0;
-#X connect 9 0 10 0;
+#X connect 9 0 13 0;
 #X connect 9 1 11 0;
 #X connect 10 0 8 0;
 #X connect 11 0 10 1;
 #X connect 12 0 6 0;
+#X connect 13 0 10 0;

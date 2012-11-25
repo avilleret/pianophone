@@ -12,9 +12,9 @@
 
 char rowpin[6]={ \
 					RPI_GPIO_P1_26, \
-					RPI_GPIO_P1_24, \
+					RPI_GPIO_P1_08, \
 					RPI_GPIO_P1_23, \
-					RPI_GPIO_P1_22, \
+					RPI_GPIO_P1_10, \
 					RPI_GPIO_P1_15, \
 					RPI_GPIO_P1_12 };
 
@@ -27,24 +27,24 @@ char colpin[6]={ \
 					RPI_GPIO_P1_11 };
 
 static uint8_t keymap[18]={	\
-				61 /* 1 */, \
-				71 /* 2 */, \
-				65 /* 3 */, \
-				60 /* 4*/, \
-				75 /* 5 */, \
-				72 /* 6*/, \
-				67 /* 7 */, \
-				62 /* 8 */, \
-				63 /* 9 */, \
-				74 /* 10 */, \
-				69 /* 11 */, \
-				64 /* 12 */, \
-				73 /* 13 */, \
-				68 /* 14 */, \
-				15 /* 15 */, \
-				66 /* 16 */, \
-				70 /* 17 */, \
-				74 /* 18 */};
+				61 /* 0 */, \
+				71 /* 1 */, \
+				65 /* 2 */, \
+				60 /* 3 */, \
+				76 /* 4 */, \
+				72 /* 5 */, \
+				67 /* 6 */, \
+				62 /* 7 */, \
+				63 /* 8 */, \
+				74 /* 9 */, \
+				69 /* 10 */, \
+				64 /* 11 */, \
+				73 /* 12 */, \
+				68 /* 13 */, \
+				15 /* 14 */, \
+				66 /* 15 */, \
+				70 /* 16 */, \
+				75 /* 17 */};
 										
 int main(int argc, char **argv)
 {
@@ -53,7 +53,7 @@ int main(int argc, char **argv)
 	//bcm2835_set_debug(1);
 
 	uint8_t curr_state[18],last_state[18], change_state[18];
-	int i,j;
+	int i,j, err=0;
 	lo_address t;
 
 	if(init()) {
@@ -88,15 +88,15 @@ int main(int argc, char **argv)
 		for(i=0;i<18;i++){
 			change_state[i] = curr_state[i] ^ last_state[i];
 			last_state[i] = curr_state[i];
+			//~ printf("%d ", curr_state[i]);
 			if (change_state[i]) {
-				int err=0;
 				err=lo_send(t, "/note", "cc", keymap[i], curr_state[i]);
-				printf("/note %d %d\n",keymap[i], curr_state[i]);
+				//~ printf("/note %d %d\n",keymap[i], curr_state[i]);
 			}
 		}
-	
+	//~ printf("\n");
 		// wait a bit
-		 //~ delay(1000);
+		 delay(1);
     }
 }
 
@@ -128,4 +128,3 @@ int init(){
 	return 0;
 
 }
-
