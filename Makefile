@@ -1,5 +1,7 @@
 all:
-	gcc -o pianophone -l rt pianophone.c -l bcm2835 -l lo
+	g++ -o pianophone -l rt pianophone.cpp -l bcm2835 -l lo
+	gcc -o lcd -l rt lcd.c
 
 clean:
 	rm pianophone
+	rm lcd
