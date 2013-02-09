@@ -1,0 +1,11 @@
+#N canvas 967 432 450 300 10;
+#X declare -path abs -path bin;
+#X obj 205 61 r note;
+#X obj 138 101 synthvoice;
+#X msg 205 81 \$2 \$1;
+#X obj 138 123 dac~;
+#X obj 44 15 declare -path abs -path bin;
+#X connect 0 0 2 0;
+#X connect 1 0 3 0;
+#X connect 1 0 3 1;
+#X connect 2 0 1 1;
