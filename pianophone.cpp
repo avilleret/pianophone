@@ -16,16 +16,32 @@ int main(int argc, char **argv)
     // Use for testing
 	//bcm2835_set_debug(1);
 
-	uint8_t curr_state[18],last_state[18], change_state[18];
-	int i,j, err=0;
+	uint8_t curr_state[20],last_state[20], change_state[20];
+	int i,j, err=0, file_index=0;
 	lo_address t;
+	curr_state[18]=0;
+	curr_state[19]=0;
 	
 	const char *filename = std::string("/dev/i2c-0").c_str();								// Name of the port we will be using
 	int  i2c_address = 0x3E;										// Address of LCD display										
 	
 	if(init_GPIO() || init_LCD(filename, i2c_address)) {
+		printf("initilization error, exiting...\n");
 		return 1;
 	}
+	
+	sendStr("(R)pianophone\nV.1");
+	sleep(2);
+	const char *display;
+	if ( files.size() > file_index+1 ){
+		display = (files[file_index]+"\n"+files[file_index+1]).c_str();
+	} else if (files.size()==(file_index-1)){
+		display=files[0].c_str();
+	} else {
+		display="\n";
+	}
+	printf("nombre de patches trouvés : %d\n", files.size());
+	sendStr(display);	
 	
 	t=lo_address_new("239.0.0.1","7770"); // multicast the OSC stream, so we can receive note on any computer on the same local network
 	
@@ -50,15 +66,39 @@ int main(int argc, char **argv)
 			//~ printf("\t%d",curr_state[12+i]);
 		}
 		
+		int sum=0;
 		//~ detect change and send note over OSC
 		for(i=0;i<18;i++){
 			change_state[i] = curr_state[i] ^ last_state[i];
 			last_state[i] = curr_state[i];
+			sum+=change_state[i];
 			//~ printf("%d ", curr_state[i]);
 			if (change_state[i]) {
-				err=lo_send(t, "/note", "cc", keymap[i], curr_state[i]);
-				//~ printf("/note %d %d\n",keymap[i], curr_state[i]);
+				err=lo_send(t, "/note", "ii", keymap[i], curr_state[i]);
+				printf("/note %d %d\n",keymap[i], curr_state[i]);
+				printf("index %d\n",i);
 			}
+		}
+		
+		//~ if ( sum==0 && (curr_state[16] || curr_state[17]) ) { 
+		if ( sum==1 && (curr_state[16] || curr_state[17]) ) {  //~ change to sum==0 when buttons will be ready !
+			if ( change_state[16] && curr_state[16]) file_index--;
+			if ( change_state[17] && curr_state[17]) file_index++;
+			file_index=(file_index+10000*files.size())%files.size();
+			printf("fileindex : %d/%d\n",file_index, files.size()); 
+			if ( files.size() > file_index+1 ){
+				printf("2 lines\n");
+				display = (files[file_index]+"\n"+files[file_index+1]).c_str();
+			} else if (files.size()==file_index+1){
+				printf("1 line\n");
+				display=files[file_index].c_str();
+			} else {
+				printf("0 line\n");
+				display="\n";
+			}
+			printf("send string\n");
+			err=lo_send(t, "/open", "s", files[file_index].c_str());
+			sendStr(display);
 		}
     }
 }
@@ -125,23 +165,6 @@ int init_LCD (const char *fileName, int address)
 	buf[index++]=0x5F;  // ICON disp on, Booster on, Contrast high byte 
 	buf[index++]=0x6D;  // Follower circuit (internal), amp ratio (6)
 	
-	busy = read(fd, &busy, 1);
-	printf("busy flag : %d, address : %X\n", busy >> 7, busy && 0x7F);
-	printf("busy %X\n", busy);
-
-	status = write( fd, buf, index);
-	if ( status != index ){
-		printf("\terror : %x\nstatus : %d\n", errno, status);
-		return -1;
-	} else {
-		printf("\tOK\n");
-	}
-	
-	sleep(0.2);
-	printf("switch on display ...");
-	index=0;
-	
-	buf[index++]=0x00;   // Send command to the display
 	buf[index++]=0x0C;  // Display on
 	buf[index++]=0x01;  // Clear display
 	buf[index++]=0x06;  // Entry mode set - increment
@@ -153,11 +176,9 @@ int init_LCD (const char *fileName, int address)
 	} else {
 		printf("\tOK\n");
 	}
-	const std::string path=std::string(".");
-	std::vector <std::string> files = read_directory(path);
-	
-	sendStr(files[0].c_str());
-	
+	const std::string path=std::string("./patches");
+	files = read_directory(path);
+		
 	return 0;
 }
 
@@ -190,11 +211,23 @@ std::vector <std::string> read_directory( const std::string& path )
 }
 
 // Write a string to LCD   
-void sendStr(const char *ptString)   
+int sendStr(const char *ptString)   
 {   
 	char buf[128];
-	int index=0;
-		
+	int index=0, status=-1;
+	
+	buf[index++]=0x00;  // Send command
+	buf[index++]=0x01;  // Clear display
+	buf[index++]=0x01;  // Clear display
+	status = write(fd, buf, index);
+    
+   	if ( status != index) {	
+		printf("Error writing %d bytes to i2c slave, %d (clear display)\n", index, status);
+		return(1);
+	}
+	usleep(200000);
+	
+	index=0;	
 	printf("Displaying \"%s\"...\n", ptString);
 	buf[index++]=RAM_WRITE_CMD;
     while((*ptString)!='\0')   
@@ -203,12 +236,19 @@ void sendStr(const char *ptString)
 			printf("buffer overflow\n");
 			break;
 		}
-        buf[index++]=*ptString++;
+		if (*ptString =='\n'){
+			while(index<41){
+				buf[index++]=' ';
+			}
+		} else {
+			buf[index++]=*ptString;
+		}
+		*ptString++;
     }
-    int status = write(fd, buf, index);
+    status = write(fd, buf, index);
     
    	if ( status != index) {	
 		printf("Error writing %d bytes to i2c slave, %d\n", index, status);
-		exit(1);
+		return(1);
 	}
 }

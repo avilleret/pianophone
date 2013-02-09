@@ -29,10 +29,11 @@ int init_GPIO(void);
 int init_LCD (const char *fileName, int address);
 int list_patch();
 std::vector <std::string> read_directory( const std::string& path = std::string() );
-void sendStr(const char *ptString) ;
+int sendStr(const char *ptString) ;
 
 // global variables
-int fd;														// File descrition
+int fd;								// File descriptor
+std::vector <std::string> files;	// *.pd files in current directory
 
 char rowpin[6]={ \
 					RPI_GPIO_P1_26, \
@@ -50,7 +51,7 @@ char colpin[6]={ \
 					RPI_GPIO_P1_13, \
 					RPI_GPIO_P1_11 };
 
-static uint8_t keymap[18]={	\
+static uint8_t keymap[20]={	\
 				61 /* 0 */, \
 				71 /* 1 */, \
 				65 /* 2 */, \
@@ -65,7 +66,7 @@ static uint8_t keymap[18]={	\
 				64 /* 11 */, \
 				73 /* 12 */, \
 				68 /* 13 */, \
-				15 /* 14 */, \
+				0 /* 14 */, \
 				66 /* 15 */, \
 				70 /* 16 */, \
 				75 /* 17 */};
