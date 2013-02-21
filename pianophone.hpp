@@ -12,7 +12,7 @@
 #include <lo/lo.h> // liblo is for OSC communication
 #include <dirent.h>
 
-// define come LCD fnct
+// define for LCD fnct
 #define DISP_CMD 0x0;  // Command for the display
 #define RAM_WRITE_CMD  0x40; // Write to display RAM
 #define CLEAR_DISP_CMD 0x01; // Clear display command
@@ -35,38 +35,40 @@ int sendStr(const char *ptString) ;
 int fd;								// File descriptor
 std::vector <std::string> files;	// *.pd files in current directory
 
-char rowpin[6]={ \
+char rowpin[4]={ \
 					RPI_GPIO_P1_26, \
 					RPI_GPIO_P1_08, \
 					RPI_GPIO_P1_23, \
-					RPI_GPIO_P1_10, \
-					RPI_GPIO_P1_15, \
-					RPI_GPIO_P1_12 };
+					RPI_GPIO_P1_10  };
 
-char colpin[6]={ \
+char colpin[5]={ \
 					RPI_GPIO_P1_21, \
 					RPI_GPIO_P1_19, \
 					RPI_GPIO_P1_18, \
 					RPI_GPIO_P1_16, \
-					RPI_GPIO_P1_13, \
-					RPI_GPIO_P1_11 };
+					RPI_GPIO_P1_13 };
 
 static uint8_t keymap[20]={	\
 				61 /* 0 */, \
 				71 /* 1 */, \
 				65 /* 2 */, \
 				60 /* 3 */, \
-				76 /* 4 */, \
-				72 /* 5 */, \
-				67 /* 6 */, \
-				62 /* 7 */, \
-				63 /* 8 */, \
-				74 /* 9 */, \
-				69 /* 10 */, \
-				64 /* 11 */, \
-				73 /* 12 */, \
-				68 /* 13 */, \
-				0 /* 14 */, \
-				66 /* 15 */, \
-				70 /* 16 */, \
-				75 /* 17 */};
+				70 /* 4 */, \
+				76 /* 5 */, \
+				72 /* 6 */, \
+				67 /* 7 */, \
+				62 /* 8 */, \
+				75 /* 9 */, \
+				63 /* 10 */, \
+				74 /* 11 */, \
+				69 /* 12 */, \
+				64 /* 13 */, \
+				1 /* 14 */, \
+				73 /* 15 */, \
+				68 /* 16 */, \
+				17 /* 17 */, \
+				66 /* 18 */, \
+				1 /* 19 */  };
+
+#define BTN_0_INDEX 14
+#define BTN_1_INDEX 19

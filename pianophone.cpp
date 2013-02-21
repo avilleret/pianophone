@@ -52,39 +52,37 @@ int main(int argc, char **argv)
 			bcm2835_gpio_set_pud(rowpin[i], BCM2835_GPIO_PUD_OFF);
 			bcm2835_gpio_fsel(rowpin[i], BCM2835_GPIO_FSEL_OUTP);
 			bcm2835_gpio_write(rowpin[i], HIGH);
-			for(j=0;j<4;j++){
-				curr_state[i*4+j] = bcm2835_gpio_lev(colpin[j]);
+			for(j=0;j<5;j++){
+				curr_state[i*5+j] = bcm2835_gpio_lev(colpin[j]);
 			}
 			bcm2835_gpio_write(rowpin[i], LOW);
 			bcm2835_gpio_fsel(rowpin[i], BCM2835_GPIO_FSEL_INPT);
 			bcm2835_gpio_set_pud(rowpin[i], BCM2835_GPIO_PUD_DOWN);
 		}
 		
-		//~ scan last 2 switchs
-		for(i=4;i<6;i++){
-			curr_state[12+i] = bcm2835_gpio_lev(colpin[i]);
-			//~ printf("\t%d",curr_state[12+i]);
-		}
-		
 		int sum=0;
 		//~ detect change and send note over OSC
-		for(i=0;i<18;i++){
-			change_state[i] = curr_state[i] ^ last_state[i];
-			last_state[i] = curr_state[i];
-			sum+=change_state[i];
-			//~ printf("%d ", curr_state[i]);
-			if (change_state[i]) {
-				err=lo_send(t, "/note", "ii", keymap[i], curr_state[i]);
-				printf("/note %d %d\n",keymap[i], curr_state[i]);
-				printf("index %d\n",i);
-			}
+		for(i=0;i<19;i++){ // 19 is BTN_1_INDEX
+            if ( i != BTN_0_INDEX && i != 17 ) // we don't count push button and there is nothing on 17  
+            {
+                change_state[i] = curr_state[i] ^ last_state[i];
+                last_state[i] = curr_state[i];
+                sum+=change_state[i];
+            //~ printf("%d ", curr_state[i]);
+                if (change_state[i]) {
+                    err=lo_send(t, "/note", "ii", keymap[i], curr_state[i]);
+                    printf("/note %d %d\n",keymap[i], curr_state[i]);
+                    printf("index %d\n",i);
+                }
+            }
 		}
 		
 		//~ if ( sum==0 && (curr_state[16] || curr_state[17]) ) { 
-		if ( sum==1 && (curr_state[16] || curr_state[17]) ) {  //~ change to sum==0 when buttons will be ready !
-			if ( change_state[16] && curr_state[16]) file_index--;
-			if ( change_state[17] && curr_state[17]) file_index++;
-			file_index=(file_index+10000*files.size())%files.size();
+		
+        if ( sum==0 && (curr_state[BTN_0_INDEX] || curr_state[BTN_1_INDEX]) ) { //~ check buttons state
+			if ( change_state[BTN_0_INDEX] && curr_state[BTN_0_INDEX]) file_index--;
+			if ( change_state[BTN_1_INDEX] && curr_state[BTN_1_INDEX]) file_index++;
+			file_index=(file_index+10000*files.size())%files.size(); //~ add 1000 times files.size() to allow rolling (go from the last to first and vice versa)
 			printf("fileindex : %d/%d\n",file_index, files.size()); 
 			if ( files.size() > file_index+1 ){
 				printf("2 lines\n");
@@ -94,12 +92,13 @@ int main(int argc, char **argv)
 				display=files[file_index].c_str();
 			} else {
 				printf("0 line\n");
-				display="\n";
+				display="<no patches>";
 			}
 			printf("send string\n");
 			err=lo_send(t, "/open", "s", files[file_index].c_str());
 			sendStr(display);
 		}
+        
     }
 }
 
@@ -112,21 +111,15 @@ int init_GPIO(){
 	}
 	printf("setup GPIO pins\n");
 	for(i=0;i<4;i++){
-		// Set RPI colpin & rowpin to be an input
+		// Set RPI rowpin to be an input
 		bcm2835_gpio_fsel(rowpin[i], BCM2835_GPIO_FSEL_INPT);
-		bcm2835_gpio_fsel(colpin[i], BCM2835_GPIO_FSEL_INPT);
 		//  with a pullup
 		bcm2835_gpio_set_pud(rowpin[i], BCM2835_GPIO_PUD_DOWN);
-		bcm2835_gpio_set_pud(colpin[i], BCM2835_GPIO_PUD_DOWN);
 	}
-	for(i=4;i<6;i++){
-		bcm2835_gpio_fsel(rowpin[i], BCM2835_GPIO_FSEL_OUTP);
-		bcm2835_gpio_write(rowpin[i], HIGH);
-		
+	for(i=0;i<5;i++){
 		bcm2835_gpio_fsel(colpin[i], BCM2835_GPIO_FSEL_INPT);
 		bcm2835_gpio_set_pud(colpin[i], BCM2835_GPIO_PUD_DOWN);
-	}
-	
+	}	
 	printf("setup done\n");
 	return 0;
 
