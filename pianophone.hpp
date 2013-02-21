@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <ctime>
 
 #include <linux/i2c-dev.h>
 #include <sys/ioctl.h>
@@ -11,6 +12,7 @@
 #include <stdio.h>
 #include <lo/lo.h> // liblo is for OSC communication
 #include <dirent.h>
+
 
 // define for LCD fnct
 #define DISP_CMD 0x0;  // Command for the display
@@ -30,6 +32,8 @@ int init_LCD (const char *fileName, int address);
 int list_patch();
 std::vector <std::string> read_directory( const std::string& path = std::string() );
 int sendStr(const char *ptString) ;
+
+std::clock_t start_time, end_time;
 
 // global variables
 int fd;								// File descriptor

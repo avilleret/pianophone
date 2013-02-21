@@ -21,6 +21,7 @@ int main(int argc, char **argv)
 	lo_address t;
 	curr_state[18]=0;
 	curr_state[19]=0;
+    start_time=0;
 	
 	const char *filename = std::string("/dev/i2c-0").c_str();								// Name of the port we will be using
 	int  i2c_address = 0x3E;										// Address of LCD display										
@@ -62,43 +63,53 @@ int main(int argc, char **argv)
 		
 		int sum=0;
 		//~ detect change and send note over OSC
-		for(i=0;i<19;i++){ // 19 is BTN_1_INDEX
-            if ( i != BTN_0_INDEX && i != 17 ) // we don't count push button and there is nothing on 17  
+		for(i=0;i<20;i++){ 
+            if ( i != 17 ) // there is nothing on 17  
             {
-                change_state[i] = curr_state[i] ^ last_state[i];
+                change_state[i] = curr_state[i] != last_state[i];
                 last_state[i] = curr_state[i];
                 sum+=change_state[i];
-            //~ printf("%d ", curr_state[i]);
+                //~ printf("%d ", change_state[i]);
                 if (change_state[i]) {
                     err=lo_send(t, "/note", "ii", keymap[i], curr_state[i]);
-                    printf("/note %d %d\n",keymap[i], curr_state[i]);
-                    printf("index %d\n",i);
+                    //~ printf("/note %d %d\n",keymap[i], curr_state[i]);
+                    //~ printf("index %d\n",i);
                 }
             }
 		}
-		
-		//~ if ( sum==0 && (curr_state[16] || curr_state[17]) ) { 
-		
-        if ( sum==0 && (curr_state[BTN_0_INDEX] || curr_state[BTN_1_INDEX]) ) { //~ check buttons state
+        //~ printf("\n");
+        
+         if (curr_state[BTN_0_INDEX] && curr_state[BTN_1_INDEX]) {
+            if ( start_time == 0 ){
+                start_time = std::clock();
+            }
+            end_time=std::clock();
+            //~ printf("change state : %d, %d\n", change_state[BTN_0_INDEX], change_state[BTN_1_INDEX]);
+            //~ printf("start time : %d,\t end_time : %d,\t CLOCKS_PER_SEC : %d\n", start_time, end_time,CLOCKS_PER_SEC);
+            //~ printf("elapsed time : %d\n", end_time - start_time);
+            if ( (end_time - start_time) > 3*CLOCKS_PER_SEC ) {
+                //~ shutdown the RPi
+                sendStr("Shutdown... \n bye bye !");
+                system("shutdown -h -P now");
+                return 0;
+            }
+        } else if (curr_state[BTN_0_INDEX] || curr_state[BTN_1_INDEX]) { //~ check buttons state
 			if ( change_state[BTN_0_INDEX] && curr_state[BTN_0_INDEX]) file_index--;
 			if ( change_state[BTN_1_INDEX] && curr_state[BTN_1_INDEX]) file_index++;
 			file_index=(file_index+10000*files.size())%files.size(); //~ add 1000 times files.size() to allow rolling (go from the last to first and vice versa)
-			printf("fileindex : %d/%d\n",file_index, files.size()); 
+			//~ printf("fileindex : %d/%d\n",file_index, files.size()); 
 			if ( files.size() > file_index+1 ){
-				printf("2 lines\n");
 				display = (files[file_index]+"\n"+files[file_index+1]).c_str();
 			} else if (files.size()==file_index+1){
-				printf("1 line\n");
 				display=files[file_index].c_str();
 			} else {
-				printf("0 line\n");
 				display="<no patches>";
 			}
-			printf("send string\n");
 			err=lo_send(t, "/open", "s", files[file_index].c_str());
 			sendStr(display);
-		}
-        
+		} else {
+            start_time = 0;
+        }
     }
 }
 
@@ -221,7 +232,7 @@ int sendStr(const char *ptString)
 	usleep(200000);
 	
 	index=0;	
-	printf("Displaying \"%s\"...\n", ptString);
+	//~ printf("Displaying \"%s\"...\n", ptString);
 	buf[index++]=RAM_WRITE_CMD;
     while((*ptString)!='\0')   
     {   
