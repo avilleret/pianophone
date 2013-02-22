@@ -23,6 +23,6 @@ sudo chmod o+rw /dev/i2c*
 cd /home/pi/pianophone
 /home/pi/pianophone/pianophone &
 
-su pi -c "pd -nogui /home/pi/pianophone/patches/loader.pd"
+su pi -c "pd -nogui /home/pi/pianophone/patches/abs/loader.pd" &
 
 exit 0
