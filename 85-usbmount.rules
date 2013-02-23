@@ -1,4 +1,0 @@
-# Rules for (R)Pianophone
-
-KERNEL=="sd??*", SUBSYSTEMS=="usb",	ACTION=="add",		RUN+="/home/pi/pianophone/copy.sh"
-KERNEL=="sd*",				ACTION=="remove",	RUN+="/home/pi/pianophone/start.sh"

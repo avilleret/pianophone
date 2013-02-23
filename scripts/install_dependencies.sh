@@ -18,3 +18,10 @@ sudo make check
 sudo make install
 
 sudo apt-get install liblo-dev	
+
+
+echo install scripts...
+
+sudo rm /etc/rc.local
+sudo ln -s $PWD/rc.local /etc/
+sudo ln -s $PWD/85-usbmount.rules /etc/udev/rules.d/
