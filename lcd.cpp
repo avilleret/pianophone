@@ -59,22 +59,33 @@ int init_LCD (const char *fileName, int address)
 	buf[index++]=0x5F;  // ICON disp on, Booster on, Contrast high byte 
 	buf[index++]=0x6D;  // Follower circuit (internal), amp ratio (6)
 	
-	buf[index++]=0x0C;  // Display on
-	buf[index++]=0x01;  // Clear display
-	buf[index++]=0x06;  // Entry mode set - increment
-	
-	status = write( fd, buf, index);
+    	status = write( fd, buf, index);
 	if ( status != index ){
 		printf("\terror : %x\nstatus : %d\n", errno, status);
 		return -1;
 	} else {
 		printf("\tOK\n");
 	}
+    index=0;
+    
+    usleep(200);
+    buf[index++]=0x00;   // Send command to the display
+	buf[index++]=0x0C;  // Display on
+	buf[index++]=0x01;  // Clear display
+	//~ buf[index++]=0x06;  // Entry mode set - increment
+	
+	//~ status = write( fd, buf, index);
+	//~ if ( status != index ){
+		//~ printf("\terror : %x\nstatus : %d\n", errno, status);
+		//~ return -1;
+	//~ } else {
+		//~ printf("\tOK\n");
+	//~ }
 
 	return 0;
 }
 
-int sendStr(const char *ptString)   
+int sendStr(const char *ptString, const char *ptString2)   
 {   
 	char buf[128];
 	int index=0, status=-1;
@@ -93,21 +104,25 @@ int sendStr(const char *ptString)
 	index=0;	
 	//~ printf("Displaying \"%s\"...\n", ptString);
 	buf[index++]=RAM_WRITE_CMD;
-    while((*ptString)!='\0')   
+    while(index<21)   
     {   
-		if (index > 127){
-			printf("buffer overflow\n");
-			break;
-		}
-		if (*ptString =='\n'){
-			while(index<41){
-				buf[index++]=' ';
-			}
-		} else {
-			buf[index++]=*ptString;
-		}
-		*ptString++;
+		if ((*ptString)!='\0'){
+			buf[index++]=*ptString++;
+        } else {
+            buf[index++]=0x20;
+        }
     }
+    
+    index = 41;
+    while(index<61)   
+    {   
+		if ((*ptString2)!='\0'){
+			buf[index++]=*ptString2++;
+        } else {
+            buf[index++]=0x20;
+        }
+    }
+    
     status = write(fd, buf, index);
     
    	if ( status != index) {	
@@ -125,7 +140,12 @@ int main(int argc, char **argv)
 		printf("initilization error, exiting...\n");
 		return 1;
 	}
-    if (argc>1){
-        sendStr(argv[1]);
+    if (argc>2){
+        sendStr(argv[1],argv[2]);
+    } else if (argc==2) {
+        sendStr(argv[1],"");
+    } else {
+        sendStr("","");
     }
+
 }

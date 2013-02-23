@@ -1,16 +1,4 @@
-# Rules for USBmount -*- conf -*-
+# Rules for (R)Pianophone
 
-#KERNEL=="sd*", DRIVERS=="sbp2",		ACTION=="add",	RUN+="/bin/date > /home/pi/hello"
-KERNEL=="sd*", SUBSYSTEMS=="usb",	ACTION=="add",	RUN+="/home/pi/pianophone/copy.sh"
-#KERNEL=="sda1", SUBSYSTEMS=="usb",	ACTION=="add",	RUN+="/bin/mount /dev/sda1 /media/usb"
-#KERNEL=="sd*", SUBSYSTEMS=="usb",	ACTION=="add",	RUN+="/bin/mkdir /media/usb-%k \&\& /bin/mount /dev/%k /media/usb-%k"
-KERNEL=="ub*", SUBSYSTEMS=="usb",	ACTION=="add",	RUN+="blabla_ud_etoile"
-KERNEL=="sd*",				ACTION=="remove",	RUN+="/bin/rm -r /media/usb-%k"
-# KERNEL=="ub*",				ACTION=="remove",	RUN+="/usr/share/usbmount/usbmount remove"
-
-# ACTION=="add", SUBSYSTEM=="usb_device",	RUN+="su pi -c /home/pi/pianophone/copy.sh"
-# ACTION=="add", SUBSYSTEM=="usb_device",	RUN+="su pi -c /home/pi/pianophone/copy.sh"
-# KERNEL=="sd*", SUBSYSTEMS=="usb",	ACTION=="add",	RUN+="/bin/touch /home/pi/hello"
-# KERNEL=="ub*", SUBSYSTEMS=="usb_device",	ACTION=="add",	RUN+="mount /dev/sda1 /media/usb"
-# KERNEL=="sd*",				ACTION=="remove",	RUN+="/usr/share/usbmount/usbmount remove"
-# KERNEL=="ub*",				ACTION=="remove",	RUN+="/usr/share/usbmount/usbmount remove"
+KERNEL=="sd??*", SUBSYSTEMS=="usb",	ACTION=="add",		RUN+="/home/pi/pianophone/copy.sh"
+KERNEL=="sd*",				ACTION=="remove",	RUN+="/home/pi/pianophone/start.sh"

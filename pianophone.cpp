@@ -1,4 +1,4 @@
-// pianophone.c
+// pianophone.cpp
 //
 // interface a telephone keypad with pd
 //
@@ -9,6 +9,9 @@
 
 #include "pianophone.hpp"
 
+//~  prototypes :
+int sendStr(const char *ptString, const char *ptString2) ;
+int sendStr(const char *ptString) ;
 										
 int main(int argc, char **argv)
 {
@@ -31,18 +34,20 @@ int main(int argc, char **argv)
 		return 1;
 	}
 	
-	sendStr("(R)pianophone\nV.1");
+	sendStr("(R)pianophone","V.1.0");
 	sleep(2);
 	const char *display;
 	if ( files.size() > file_index+1 ){
-		display = (files[file_index]+"\n"+files[file_index+1]).c_str();
+		//~ display = (files[file_index]+"\n"+files[file_index+1]).c_str();
+		sendStr(files[file_index].c_str(),files[file_index+1].c_str());
 	} else if (files.size()==(file_index-1)){
-		display=files[0].c_str();
+		//~ display=files[0].c_str();
+		sendStr(files[0].c_str(),"");
 	} else {
-		display="\n";
+        sendStr("","");
+		//~ display="\n";
 	}
-	printf("nombre de patches trouvés : %d\n", files.size());
-	sendStr(display);	
+	//~ sendStr(display);	
 	
 	t=lo_address_new("239.0.0.1","7770"); // multicast the OSC stream, so we can receive note on any computer on the same local network
 	
@@ -61,35 +66,28 @@ int main(int argc, char **argv)
 			bcm2835_gpio_set_pud(rowpin[i], BCM2835_GPIO_PUD_DOWN);
 		}
 		
-		int sum=0;
 		//~ detect change and send note over OSC
 		for(i=0;i<20;i++){ 
             if ( i != 17 ) // there is nothing on 17  
             {
                 change_state[i] = curr_state[i] != last_state[i];
                 last_state[i] = curr_state[i];
-                sum+=change_state[i];
-                //~ printf("%d ", change_state[i]);
                 if (change_state[i]) {
                     err=lo_send(t, "/note", "ii", keymap[i], curr_state[i]);
-                    //~ printf("/note %d %d\n",keymap[i], curr_state[i]);
-                    //~ printf("index %d\n",i);
                 }
             }
 		}
         //~ printf("\n");
         
          if (curr_state[BTN_0_INDEX] && curr_state[BTN_1_INDEX]) {
+             //~ When you press the two buttons together during at least 3 seconds, the RPi shuts down
             if ( start_time == 0 ){
                 start_time = std::clock();
             }
             end_time=std::clock();
-            //~ printf("change state : %d, %d\n", change_state[BTN_0_INDEX], change_state[BTN_1_INDEX]);
-            //~ printf("start time : %d,\t end_time : %d,\t CLOCKS_PER_SEC : %d\n", start_time, end_time,CLOCKS_PER_SEC);
-            //~ printf("elapsed time : %d\n", end_time - start_time);
             if ( (end_time - start_time) > 3*CLOCKS_PER_SEC ) {
                 //~ shutdown the RPi
-                sendStr("Shutdown... \n bye bye !");
+                sendStr("Shutdown...", "bye bye !");
                 system("shutdown -h -P now");
                 return 0;
             }
@@ -97,16 +95,14 @@ int main(int argc, char **argv)
 			if ( change_state[BTN_0_INDEX] && curr_state[BTN_0_INDEX]) file_index--;
 			if ( change_state[BTN_1_INDEX] && curr_state[BTN_1_INDEX]) file_index++;
 			file_index=(file_index+10000*files.size())%files.size(); //~ add 1000 times files.size() to allow rolling (go from the last to first and vice versa)
-			//~ printf("fileindex : %d/%d\n",file_index, files.size()); 
-			if ( files.size() > file_index+1 ){
-				display = (files[file_index]+"\n"+files[file_index+1]).c_str();
-			} else if (files.size()==file_index+1){
-				display=files[file_index].c_str();
-			} else {
-				display="<no patches>";
-			}
+            if ( files.size() > file_index+1 ){
+                sendStr(files[file_index].c_str(),files[file_index+1].c_str());
+            } else if (files.size()==(file_index+1)){
+                sendStr(files[file_index].c_str(),"");
+            } else {
+                sendStr("<no patch found>","");
+            }
 			err=lo_send(t, "/open", "s", files[file_index].c_str());
-			sendStr(display);
 		} else {
             start_time = 0;
         }
@@ -204,18 +200,25 @@ std::vector <std::string> read_directory( const std::string& path )
 		std::string tmp = std::string( de->d_name );
 		if ( (tmp.length()>3) && tmp.substr(tmp.length()-3)==std::string(".pd") ){ // only catch .pd files
 			result.push_back( tmp );
-			//~ std::cout << tmp << "\t" << tmp.substr(tmp.length()-3) << std::endl;
+			std::cout << tmp << std::endl;
 		}
 	}
     closedir( dp );
     std::sort( result.begin(), result.end() );
-    }	
+    }
+    printf("nombre de patches trouvés : %d\n", result.size());
     
   return result;
 }
 
-// Write a string to LCD   
+// Write a string to LCD  
+
 int sendStr(const char *ptString)   
+{   
+    sendStr(ptString, "");
+}
+
+int sendStr(const char *ptString, const char *ptString2)   
 {   
 	char buf[128];
 	int index=0, status=-1;
@@ -234,21 +237,25 @@ int sendStr(const char *ptString)
 	index=0;	
 	//~ printf("Displaying \"%s\"...\n", ptString);
 	buf[index++]=RAM_WRITE_CMD;
-    while((*ptString)!='\0')   
+    while(index<21)   
     {   
-		if (index > 127){
-			printf("buffer overflow\n");
-			break;
-		}
-		if (*ptString =='\n'){
-			while(index<41){
-				buf[index++]=' ';
-			}
-		} else {
-			buf[index++]=*ptString;
-		}
-		*ptString++;
+		if ((*ptString)!='\0'){
+			buf[index++]=*ptString++;
+        } else {
+            buf[index++]=0x20;
+        }
     }
+    
+    index = 41;
+    while(index<61)   
+    {   
+		if ((*ptString2)!='\0'){
+			buf[index++]=*ptString2++;
+        } else {
+            buf[index++]=0x20;
+        }
+    }
+    
     status = write(fd, buf, index);
     
    	if ( status != index) {	
