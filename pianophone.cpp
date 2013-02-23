@@ -38,19 +38,16 @@ int main(int argc, char **argv)
 	sleep(2);
 	const char *display;
 	if ( files.size() > file_index+1 ){
-		//~ display = (files[file_index]+"\n"+files[file_index+1]).c_str();
 		sendStr(files[file_index].c_str(),files[file_index+1].c_str());
-	} else if (files.size()==(file_index-1)){
-		//~ display=files[0].c_str();
+	} else if (files.size()==(file_index+1)){
 		sendStr(files[0].c_str(),"");
 	} else {
         sendStr("","");
-		//~ display="\n";
 	}
-	//~ sendStr(display);	
 	
 	t=lo_address_new("239.0.0.1","7770"); // multicast the OSC stream, so we can receive note on any computer on the same local network
-	
+	lo_send(t, "/open", "s", files[file_index].c_str());
+    
 	while (1)
 	{	
 		//~ scan keypad array
@@ -77,7 +74,6 @@ int main(int argc, char **argv)
                 }
             }
 		}
-        //~ printf("\n");
         
          if (curr_state[BTN_0_INDEX] && curr_state[BTN_1_INDEX]) {
              //~ When you press the two buttons together during at least 3 seconds, the RPi shuts down
