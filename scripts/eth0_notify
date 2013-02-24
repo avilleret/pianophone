@@ -1,0 +1,20 @@
+#!/bin/sh
+
+while true; do 
+        IP1=$(/sbin/ifconfig eth0 | grep 'inet adr:' | cut -d: -f2 | awk '{ print $1}')
+        #~ echo IP1 $IP1 # > /home/pi/log
+        #~ echo IP2 $IP2
+        if [ "$IP1" != "$IP2" ]; then
+            if [ -z "$IP1" ]; then 
+                echo disconnect
+            else 
+                echo IP change !
+            fi
+                #~ /home/pi/pianophone/lcd $IP $HOSTNAME
+        fi
+        IP2=$IP1
+        sleep 0.1
+done
+
+exit 0
+
