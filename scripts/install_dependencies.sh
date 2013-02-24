@@ -22,6 +22,6 @@ sudo apt-get install liblo-dev
 
 echo install scripts...
 
-sudo rm /etc/rc.local
-sudo ln -s $PWD/rc.local /etc/
-sudo ln -s $PWD/85-usbmount.rules /etc/udev/rules.d/
+sudo ln -fs $PWD/rc.local /etc/
+sudo ln -fs $PWD/85-usbmount.rules /etc/udev/rules.d/
+sudo ln -fs $PWD/display_IP.sh /etc/network/if-up.d/zz-display_IP
