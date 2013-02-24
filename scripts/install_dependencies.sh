@@ -1,4 +1,6 @@
 #!/bin/bash
+DIRNAME="$(dirname $(readlink -f $0))"
+echo $DIRNAME
 
 echo Installation de bcm2835...
 cd ~
@@ -22,6 +24,6 @@ sudo apt-get install liblo-dev
 
 echo install scripts...
 
-sudo ln -fs $PWD/rc.local /etc/
-sudo ln -fs $PWD/85-usbmount.rules /etc/udev/rules.d/
-sudo ln -fs $PWD/display_IP.sh /etc/network/if-up.d/zz-display_IP
+sudo ln -fs $DIRNAME/rc.local /etc/
+sudo cp $DIRNAME/85-usbmount.rules /etc/udev/rules.d/
+sudo ln -fs $DIRNAME/display_IP.sh /etc/network/if-up.d/zz-display_IP
