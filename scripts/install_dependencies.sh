@@ -26,5 +26,6 @@ echo install scripts...
 
 sudo ln -fs $DIRNAME/rc.local /etc/
 sudo cp $DIRNAME/85-usbmount.rules /etc/udev/rules.d/
+sudo cp $DIRNAME/86-UGM86.rules /etc/udev/rules.d/
 sudo ln -fs $DIRNAME/display_IP.sh /etc/network/if-up.d/zz-display_IP
 sudo ln -fs $DIRNAME/shutdown.sh /etc/rc6.d/K08clearLCD
