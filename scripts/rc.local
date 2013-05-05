@@ -25,10 +25,9 @@ fi
 
 setterm -blank 0 # disable screen blanking
 
-
-cd /home/pi/pianophone
-su pi -c "pd -nogui /home/pi/pianophone/patches/abs/loader.pd" &
-sleep 1
-/home/pi/pianophone/pianophone &
+#~ cd /home/pi/pianophone
+#~ su pi -c "pd -nogui /home/pi/pianophone/patches/abs/loader.pd" &
+#~ sleep 1
+#~ /home/pi/pianophone/pianophone &
 
 exit 0
