@@ -1,0 +1,2 @@
+ATTRS{idVendor}=="0a92", ATTRS{idProduct}=="2041", ACTION=="add",		RUN+="/home/pi/pianophone/scripts/disable_ethernet.sh"
+ATTRS{idVendor}=="0a92", ATTRS{idProduct}=="2041", ACTION=="remove",		RUN+="/home/pi/pianophone/scripts/enable_ethernet.sh"
