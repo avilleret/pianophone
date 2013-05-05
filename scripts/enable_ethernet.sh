@@ -1,5 +1,13 @@
 #!/bin/bash
-/home/pi/pianophone/lcd "Stop pianophone Start Ethernet"
+/home/pi/pianophone/lcd "Stop pianophone" "Start Ethernet"
 killall pianophone pd
-echo -n "1-1.1:1.0" | sudo tee /sys/bus/usb/drivers/smsc95xx/bind
-dhclient eth0
+_ETH0=$(ifconfig | grep eth0) || true
+
+if [ "$_ETH0" ]; then
+	echo eth0 found
+else
+	echo -n "1-1.1:1.0" | sudo tee /sys/bus/usb/drivers/smsc95xx/bind
+   dhclient eth0
+fi
+
+
