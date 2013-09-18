@@ -30,17 +30,6 @@ fi
 # Disable unneeded services and set CPU to performance
 /home/pi/pianophone/scripts/disable_services.sh
 
-_UGM=$(lsusb -d 0a92:2041) || true
-if [ "$_UGM" ]; then
-  /home/pi/pianophone/scripts/disable_ethernet.sh
-  sleep 1
-# else
-#  cd $_HOME
-#  $_HOME/lcd "no sound card"
-#  sleep 1
-#  $_HOME/pianophone &
-fi
-
 # end
 
 /home/pi/pianophone/scripts/start.sh &
