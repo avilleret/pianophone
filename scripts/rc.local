@@ -15,22 +15,35 @@
 modprobe i2c-dev # load i2c module
 chmod o+rw /dev/i2c*
 
+_HOME=/home/pi/pianophone
+
 # Print the IP address
 _IP=$(hostname -I) || true
 if [ "$_IP" ]; then
   printf "My IP address is %s\n" "$_IP"
-  /home/pi/pianophone/lcd $_IP $(hostname)
+  $_HOME/lcd $_IP $(hostname)
   sleep 5
 fi
 
-setterm -blank 0 # disable screen blanking
+# setterm -blank 0 # disable screen blanking
 
 # Disable unneeded services and set CPU to performance
 /home/pi/pianophone/scripts/disable_services.sh
 
-#~ cd /home/pi/pianophone
-#~ su pi -c "pd -nogui /home/pi/pianophone/patches/abs/loader.pd" &
-#~ sleep 1
-#~ /home/pi/pianophone/pianophone &
+_UGM=$(lsusb -d 0a92:2041) || true
+if [ "$_UGM" ]; then
+  /home/pi/pianophone/scripts/disable_ethernet.sh
+  /home/pi/pianophone/lcd "Ethernet disable"
+  sleep 1
+# else
+#  cd $_HOME
+#  $_HOME/lcd "no sound card"
+#  sleep 1
+#  $_HOME/pianophone &
+fi
+
+# end
+
+/home/pi/pianophone/scripts/start.sh &
 
 exit 0
