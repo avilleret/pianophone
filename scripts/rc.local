@@ -33,7 +33,6 @@ fi
 _UGM=$(lsusb -d 0a92:2041) || true
 if [ "$_UGM" ]; then
   /home/pi/pianophone/scripts/disable_ethernet.sh
-  /home/pi/pianophone/lcd "Ethernet disable"
   sleep 1
 # else
 #  cd $_HOME

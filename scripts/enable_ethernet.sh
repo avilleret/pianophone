@@ -1,6 +1,5 @@
 #!/bin/bash
-/home/pi/pianophone/lcd "Stop pianophone" "Start Ethernet"
-killall pianophone pd
+/home/pi/pianophone/lcd "Start Ethernet"
 _ETH0=$(ifconfig | grep eth0) || true
 
 if [ "$_ETH0" ]; then

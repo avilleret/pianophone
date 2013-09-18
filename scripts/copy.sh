@@ -26,6 +26,6 @@ do
 done
 
 #~ print some fun on LCD
-/home/pi/pianophone/lcd "Youpi c'est fini" "Retire la clés USB"
+/home/pi/pianophone/lcd "Youpi c'est fini" "Retire la clef USB"
 
 exit
