@@ -30,8 +30,15 @@ fi
 # Disable unneeded services and set CPU to performance
 /home/pi/pianophone/scripts/disable_services.sh
 
-killall pd pianophone
+_UGM=$(lsusb | grep 0a92:2041) || true
+if [ "$_UGM" ]
+then
+  echo soundcard detected
+fi
 
+#killall pd pianophone
+sleep 2
+echo Start pianophone
 /home/pi/pianophone/scripts/start.sh &
 
 exit 0
