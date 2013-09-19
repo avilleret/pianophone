@@ -30,7 +30,7 @@ fi
 # Disable unneeded services and set CPU to performance
 /home/pi/pianophone/scripts/disable_services.sh
 
-# end
+killall pd pianophone
 
 /home/pi/pianophone/scripts/start.sh &
 
