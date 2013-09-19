@@ -1,5 +1,6 @@
 #!/bin/bash
 
+sleep 30
 PID=`pgrep pianophone`
 echo $PID
 if [ $PID ] ; then
