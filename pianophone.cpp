@@ -45,7 +45,7 @@ int main(int argc, char **argv)
         sendStr("","");
 	}
 	
-	t=lo_address_new("239.0.0.1","7770"); // multicast the OSC stream, so we can receive note on any computer on the same local network
+	t=lo_address_new("127.0.0.1","7770"); // multicast the OSC stream, so we can receive note on any computer on the same local network
 	lo_send(t, "/open", "s", files[file_index].c_str());
     
 	while (1)
