@@ -1,0 +1,35 @@
+#N canvas 366 223 830 463 10;
+#X declare -path rj -path abs;
+#X text -49 81 reçoit les notes jouées sur le clavier du pianophone
+;
+#X text -19 20 permet d'utiliser les abstraction du dossier rj;
+#X obj -119 96 c_keyboard;
+#X obj -118 139 adc~;
+#X text -82 140 entrée audio;
+#X text -81 180 sortie audio;
+#X obj -115 239 enable-input;
+#X obj -115 220 tgl 15 1 empty empty empty 17 7 0 10 -262144 -1 -1
+0 1;
+#X text -86 221 active/désactive l'entrée micro;
+#X text -34 239 ne fonctionne QUE sur le pianophone;
+#X text -125 262 il est nécessaire pour certains patch de désactiver
+l'entrée audio pour ne pas avoir de clicks;
+#X obj -189 18 declare -path rj -path abs;
+#X obj -117 320 tgl 15 0 empty empty compute_audio 17 7 0 10 -262144
+-1 -1 0 1;
+#X obj -117 344 switch~;
+#X obj -117 297 r dsp;
+#X text -60 341 switch~ permet d'activer le calcul audio dans le patch
+où il est placé \, il est donc important de le mettre au bon endroit
+;
+#X text -59 377 il n'est pas nécessaire dans tous les patchs mais
+permet d'éviter des petits clics lorsqu'on change de patch sur le
+pianophone;
+#X obj -117 180 dac~;
+#X obj 268 167 OVERVIEW;
+#X text 322 168 aperçu de tous les objets rj disponibles;
+#X text -49 95 et permet d'utiliser le clavier de l'ordinateur pour
+simuler le pianophone;
+#X connect 7 0 6 0;
+#X connect 12 0 13 0;
+#X connect 14 0 12 0;
