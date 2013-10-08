@@ -1,7 +1,6 @@
-#N canvas 667 345 786 663 10;
-#X declare -path rj;
+#N canvas 467 285 928 663 10;
+#X declare -path rj -path abs;
 #X obj 199 296 adc~;
-#X obj 72 18 declare -path rj;
 #X obj 72 37 OVERVIEW;
 #X obj 315 99 g_nbx delr;
 #X obj 315 64 g_nbx dell;
@@ -9,7 +8,6 @@
 #X obj 315 134 g_nhsl feedback 0 1;
 #X obj 199 498 soundoutput;
 #X msg 332 346 help;
-#X obj 199 346 e_dubdel mydubdel;
 #X obj 315 29 g_nbx basedur;
 #X obj 315 169 g_nbx bq;
 #X obj 315 244 g_hsl dry 0 1;
@@ -31,10 +29,10 @@
 #X obj 92 149 > 0;
 #X obj 48 185 spigot;
 #X obj 48 207 - 60;
-#X obj 48 270 vradio 15 1 0 16 empty empty recall 0 -8 0 10 -4034 -13381
+#X obj 48 270 vradio 15 1 1 12 empty empty recall 0 -8 0 10 -4034 -13381
 -1 2;
-#X obj 28 270 vradio 15 1 0 16 empty empty save -10 -8 0 10 -258113
--86277 -1 1;
+#X obj 28 270 vradio 15 1 0 12 empty empty save -10 -8 0 10 -258113
+-86277 -1 2;
 #X text 67 269 1;
 #X text 67 284 2;
 #X text 67 299 3;
@@ -46,7 +44,7 @@
 #X text 67 390 9;
 #X text 67 404 10;
 #X text 67 420 11;
-#N canvas 66 378 1727 587 save/recall 0;
+#N canvas 192 492 1727 587 save/recall 0;
 #X obj 51 37 inlet;
 #X obj 212 39 inlet;
 #X obj 90 157 s save-preset-number;
@@ -54,80 +52,83 @@
 #X msg 51 107 -1;
 #X obj 106 121 s recall-data;
 #X msg 106 100 save;
+#X msg 61 -276 \; recall-data dry 0.267717 \, bq 5 \, basedur 228 \,
+bpitch 98 \, feedback 1 \, dell 2 \, delr 3 \,;
+#X msg 61 -186 \; recall-data dry 0.23622 \, bq 2 \, basedur 500 \,
+bpitch 83 \, feedback 0.99 \, dell 2.5 \, delr 5 \,;
+#X msg 61 -96 \; recall-data dry 0.23622 \, bq 2 \, basedur 500 \,
+bpitch 83 \, feedback 0.99 \, dell 2 \, delr 3 \,;
+#X msg 451 -366 \; recall-data dry 0.23622 \, bq 2 \, basedur 500 \,
+bpitch 83 \, feedback 0.99 \, dell 2 \, delr 3 \,;
+#X msg 451 -276 \; recall-data dry 0.23622 \, bq 2 \, basedur 500 \,
+bpitch 83 \, feedback 0.99 \, dell 2 \, delr 3 \,;
+#X msg 451 -186 \; recall-data dry 0.23622 \, bq 2 \, basedur 500 \,
+bpitch 83 \, feedback 0.99 \, dell 2 \, delr 3 \,;
+#X msg 451 -96 \; recall-data dry 0.23622 \, bq 2 \, basedur 500 \,
+bpitch 83 \, feedback 0.99 \, dell 2 \, delr 3 \,;
+#X msg 61 -366 \; recall-data dry 0.23622 \, bq 2 \, basedur 500 \,
+bpitch 83 \, feedback 0.99 \, dell 2 \, delr 3 \,;
+#X msg 801 -276 \; recall-data dry 0.23622 \, bq 2 \, basedur 500 \,
+bpitch 83 \, feedback 0.99 \, dell 2 \, delr 3 \,;
+#X msg 801 -186 \; recall-data dry 0.23622 \, bq 2 \, basedur 500 \,
+bpitch 83 \, feedback 0.99 \, dell 2 \, delr 3 \,;
+#X msg 801 -96 \; recall-data dry 0.23622 \, bq 2 \, basedur 500 \,
+bpitch 83 \, feedback 0.99 \, dell 2 \, delr 3 \,;
+#X msg 1191 -366 \; recall-data dry 0.23622 \, bq 2 \, basedur 500
+\, bpitch 83 \, feedback 0.99 \, dell 2 \, delr 3 \,;
+#X msg 1191 -276 \; recall-data dry 0.23622 \, bq 2 \, basedur 500
+\, bpitch 83 \, feedback 0.99 \, dell 2 \, delr 3 \,;
+#X msg 1191 -186 \; recall-data dry 0.23622 \, bq 2 \, basedur 500
+\, bpitch 83 \, feedback 0.99 \, dell 2 \, delr 3 \,;
+#X msg 1191 -96 \; recall-data dry 0.23622 \, bq 2 \, basedur 500 \,
+bpitch 83 \, feedback 0.99 \, dell 2 \, delr 3 \,;
+#X msg 801 -366 \; recall-data dry 0.23622 \, bq 2 \, basedur 500 \,
+bpitch 83 \, feedback 0.99 \, dell 2 \, delr 3 \,;
+#X obj 212 116 s recall-preset-number;
+#X obj 61 -389 u_savepreset 0;
+#X obj 801 -118 u_savepreset 11;
 #X obj 61 -298 u_savepreset 1;
 #X obj 61 -208 u_savepreset 2;
 #X obj 61 -118 u_savepreset 3;
-#X msg 61 -276 \; recall-data dry 0.409449 bq 8 basedur 0.12 bpitch
-9 feedback 0 dell 14 delr 13 \, bq 8 \, basedur 74.12 \, bpitch 9 \,
-feedback 0 \, dell -6 \, delr -15.58 \,;
-#X msg 61 -186;
-#X msg 61 -96 \; recall-data dry 0.409449 bq 8 basedur 0.12 bpitch
-9 feedback 0 dell 14 delr 13 \, bq 8 \, basedur 74.12 \, bpitch 9 \,
-feedback 0 \, dell -6 \, delr -15.58 \,;
-#X msg 451 -366;
-#X msg 451 -276;
-#X msg 451 -186;
-#X msg 451 -96;
-#X msg 61 -366 \; recall-data dry 0.409449 bq 8 basedur 0.12 bpitch
-9 feedback 0 dell 14 delr 13 \, bq 8 \, basedur 74.12 \, bpitch 9 \,
-feedback 0 \, dell -6 \, delr -15.58 \,;
-#X obj 61 -388 u_savepreset 0;
 #X obj 451 -388 u_savepreset 4;
 #X obj 451 -298 u_savepreset 5;
 #X obj 451 -208 u_savepreset 6;
 #X obj 451 -118 u_savepreset 7;
-#X msg 801 -276 \; recall-data dry 0.409449 bq 8 basedur 0.12 bpitch
-9 feedback 0 dell 14 delr 13 \, bq 8 \, basedur 74.12 \, bpitch 9 \,
-feedback 0 \, dell -6 \, delr -15.58 \,;
-#X msg 801 -186;
-#X msg 801 -96 \; recall-data dry 0.409449 bq 8 basedur 0.12 bpitch
-9 feedback 0 dell 14 delr 13 \, bq 8 \, basedur 74.12 \, bpitch 9 \,
-feedback 0 \, dell -6 \, delr -15.58 \,;
-#X msg 1191 -366;
-#X msg 1191 -276;
-#X msg 1191 -186;
-#X msg 1191 -96;
-#X msg 801 -366 \; recall-data dry 0.409449 bq 8 basedur 0.12 bpitch
-9 feedback 0 dell 14 delr 13 \, bq 8 \, basedur 74.12 \, bpitch 9 \,
-feedback 0 \, dell -6 \, delr -15.58 \,;
 #X obj 801 -388 u_savepreset 8;
 #X obj 801 -298 u_savepreset 9;
 #X obj 801 -208 u_savepreset 10;
-#X obj 801 -118 u_savepreset 11;
 #X obj 1191 -388 u_savepreset 12;
 #X obj 1191 -298 u_savepreset 13;
 #X obj 1191 -208 u_savepreset 14;
 #X obj 1191 -118 u_savepreset 15;
-#X obj 212 116 s recall-preset-number;
 #X connect 0 0 3 0;
-#X connect 1 0 39 0;
+#X connect 1 0 23 0;
 #X connect 3 0 4 0;
 #X connect 3 1 6 0;
 #X connect 3 2 2 0;
 #X connect 4 0 2 0;
 #X connect 6 0 5 0;
-#X connect 7 0 10 0;
-#X connect 8 0 11 0;
-#X connect 9 0 12 0;
-#X connect 18 0 17 0;
-#X connect 19 0 13 0;
-#X connect 20 0 14 0;
-#X connect 21 0 15 0;
-#X connect 22 0 16 0;
-#X connect 31 0 30 0;
-#X connect 32 0 23 0;
-#X connect 33 0 24 0;
-#X connect 34 0 25 0;
-#X connect 35 0 26 0;
-#X connect 36 0 27 0;
-#X connect 37 0 28 0;
-#X connect 38 0 29 0;
+#X connect 24 0 14 0;
+#X connect 25 0 17 0;
+#X connect 26 0 7 0;
+#X connect 27 0 8 0;
+#X connect 28 0 9 0;
+#X connect 29 0 10 0;
+#X connect 30 0 11 0;
+#X connect 31 0 12 0;
+#X connect 32 0 13 0;
+#X connect 33 0 22 0;
+#X connect 34 0 15 0;
+#X connect 35 0 16 0;
+#X connect 36 0 18 0;
+#X connect 37 0 19 0;
+#X connect 38 0 20 0;
+#X connect 39 0 21 0;
 #X restore 28 527 pd save/recall;
 #X obj 48 229 moses 11;
-#X obj 298 369 s save-data;
+#X obj 298 379 s save-data;
 #X obj 315 4 r recall-data;
 #X msg 395 -19 save;
-#X obj 193 94 print;
 #X obj 198 409 g_vol2;
 #N canvas 244 86 594 365 restore 0;
 #X obj 59 129 list prepend set;
@@ -143,36 +144,135 @@ feedback 0 \, dell -6 \, delr -15.58 \,;
 #X connect 4 0 6 0;
 #X connect 6 0 3 0;
 #X restore 273 428 pd restore;
-#X connect 0 0 9 0;
-#X connect 0 0 9 1;
-#X connect 0 1 9 1;
-#X connect 0 1 9 0;
-#X connect 3 0 6 0;
+#X obj 427 412 print;
+#X obj 199 345 e_dubdel mydubdel;
+#X obj 178 247 tgl 15 0 empty empty empty 17 7 0 10 -204786 -1 -1 0
+1;
+#N canvas 0 50 377 419 test__ 0;
+#X obj 45 206 s_rhodey mypiano;
+#X obj 45 168 pack 0 0;
+#X obj 45 114 m_majorscale 60;
+#X obj 45 87 random 7;
+#X obj 45 60 metro 1000;
+#X obj 45 141 makenote 80 50;
+#X obj 46 261 e_pan 0.5;
+#X obj 109 238 hsl 50 15 0 1 0 0 empty empty pan 20 8 1 10 -262144
+-86277 -1 0 1;
+#X obj 45 17 inlet;
+#X obj 45 38 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
+;
+#X obj 45 292 outlet~;
+#X obj 105 292 outlet~;
+#X connect 0 0 6 0;
+#X connect 1 0 0 0;
+#X connect 2 0 5 0;
+#X connect 3 0 2 0;
 #X connect 4 0 3 0;
-#X connect 5 0 12 0;
-#X connect 6 0 11 0;
-#X connect 8 0 9 2;
-#X connect 9 0 50 0;
-#X connect 9 1 50 1;
-#X connect 9 2 46 0;
-#X connect 10 0 4 0;
-#X connect 11 0 5 0;
-#X connect 12 0 9 2;
+#X connect 5 0 1 0;
+#X connect 5 1 1 1;
+#X connect 6 0 10 0;
+#X connect 6 1 11 0;
+#X connect 7 0 6 1;
+#X connect 8 0 9 0;
+#X connect 9 0 4 0;
+#X restore 178 267 pd test__;
+#N canvas 201 207 348 535 tap-tempo 0;
+#X obj 115 47 c_keyboard;
+#X obj 106 189 realtime;
+#X obj 106 165 t b b;
+#N canvas 495 466 536 371 mean 0;
+#X obj 130 45 inlet;
+#X obj 130 225 outlet;
+#X obj 130 124 list;
+#X obj 130 146 list split 3;
+#X obj 130 168 mean;
+#X obj 229 43 inlet;
+#X connect 0 0 2 0;
+#X connect 2 0 3 0;
+#X connect 3 0 2 1;
+#X connect 3 0 4 0;
+#X connect 3 2 2 1;
+#X connect 4 0 1 0;
+#X connect 5 0 4 1;
+#X restore 106 321 pd mean;
+#X obj 146 90 > 0;
+#X obj 146 111 sel 1;
+#X obj 146 132 s ON;
+#X floatatom 114 345 5 0 0 0 - - -, f 5;
+#X obj 145 297 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+-1 -1;
+#X obj 106 90 > 0;
+#X obj 106 111 sel 1;
+#X obj 115 69 route 74 72;
+#X obj 106 272 spigot, f 8;
+#X obj 106 211 t b f;
+#X msg 106 235 1;
+#X obj 106 363 * 4;
+#X obj 106 385 delay;
+#X msg 194 215 0;
+#X obj 194 193 t b;
+#X obj 57 361 outlet;
+#X obj 21 324 print;
+#X connect 0 0 11 0;
+#X connect 1 0 13 0;
+#X connect 2 0 1 0;
+#X connect 2 1 1 1;
+#X connect 3 0 7 0;
+#X connect 3 0 15 0;
+#X connect 3 0 19 0;
+#X connect 4 0 5 0;
+#X connect 5 0 6 0;
+#X connect 9 0 10 0;
+#X connect 10 0 2 0;
+#X connect 11 0 9 0;
+#X connect 11 1 4 0;
+#X connect 12 0 3 0;
 #X connect 13 0 14 0;
-#X connect 14 0 9 2;
-#X connect 26 0 27 0;
-#X connect 27 0 29 0;
-#X connect 27 1 28 0;
-#X connect 28 0 29 1;
-#X connect 29 0 30 0;
-#X connect 30 0 45 0;
-#X connect 31 0 44 1;
-#X connect 32 0 44 0;
-#X connect 45 0 31 0;
-#X connect 47 0 10 0;
-#X connect 47 0 49 0;
-#X connect 48 0 10 0;
-#X connect 50 0 7 0;
-#X connect 50 1 7 1;
-#X connect 50 2 51 0;
-#X connect 51 0 50 2;
+#X connect 13 1 12 0;
+#X connect 14 0 12 1;
+#X connect 15 0 16 0;
+#X connect 16 0 18 0;
+#X connect 17 0 12 1;
+#X connect 18 0 17 0;
+#X connect 18 0 8 0;
+#X restore 226 -39 pd tap-tempo;
+#X msg 226 -17 basedur \$1;
+#X obj 72 18 declare -path rj -path abs;
+#X text 67 433 12;
+#X connect 0 0 50 0;
+#X connect 0 0 50 1;
+#X connect 0 1 50 1;
+#X connect 0 1 50 0;
+#X connect 2 0 5 0;
+#X connect 3 0 2 0;
+#X connect 4 0 10 0;
+#X connect 5 0 9 0;
+#X connect 7 0 50 2;
+#X connect 8 0 3 0;
+#X connect 9 0 4 0;
+#X connect 10 0 50 2;
+#X connect 11 0 12 0;
+#X connect 12 0 50 2;
+#X connect 24 0 25 0;
+#X connect 25 0 27 0;
+#X connect 25 1 26 0;
+#X connect 26 0 27 1;
+#X connect 27 0 28 0;
+#X connect 28 0 43 0;
+#X connect 29 0 42 1;
+#X connect 30 0 42 0;
+#X connect 43 0 29 0;
+#X connect 45 0 8 0;
+#X connect 46 0 8 0;
+#X connect 47 0 6 0;
+#X connect 47 1 6 1;
+#X connect 47 2 48 0;
+#X connect 48 0 47 2;
+#X connect 50 0 47 0;
+#X connect 50 1 47 1;
+#X connect 50 2 44 0;
+#X connect 51 0 52 0;
+#X connect 52 0 50 0;
+#X connect 52 1 50 1;
+#X connect 53 0 54 0;
+#X connect 54 0 8 0;

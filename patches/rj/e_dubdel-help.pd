@@ -1,4 +1,4 @@
-#N canvas 84 40 1011 531 10;
+#N canvas 756 240 1011 531 10;
 #X obj 586 168 g_nbx delr;
 #X obj 586 133 g_nbx dell;
 #X obj 586 273 g_nbx bpitch;
@@ -14,7 +14,7 @@
 #X obj 586 313 g_hsl dry 0 1;
 #X msg 630 356 save;
 #X obj 630 383 t a b;
-#X obj 469 367 tgl 15 0 empty empty empty 17 7 0 10 -204786 -1 -1 0
+#X obj 469 367 tgl 15 0 empty empty empty 17 7 0 10 -204786 -1 -1 1
 1;
 #X obj 471 12 loadbang;
 #X text 740 208 feedback - delay feedback;
@@ -49,7 +49,7 @@ right \, actual delay will be basedur/delr. feedback <amount>: delay
 feedback. save: report current settings to last outlet.;
 #X coords 0 -1 1 1 450 450 1 100 100;
 #X restore 5 28 pd REFERENCE;
-#N canvas 0 0 377 419 test__ 0;
+#N canvas 0 50 377 419 test__ 0;
 #X obj 45 206 s_rhodey mypiano;
 #X obj 45 168 pack 0 0;
 #X obj 45 114 m_majorscale 60;
@@ -60,7 +60,7 @@ feedback. save: report current settings to last outlet.;
 #X obj 109 238 hsl 50 15 0 1 0 0 empty empty pan 20 8 1 10 -262144
 -86277 -1 0 1;
 #X obj 45 17 inlet;
-#X obj 45 38 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 0 1
+#X obj 45 38 tgl 15 0 empty empty empty 17 7 0 10 -262144 -1 -1 1 1
 ;
 #X obj 45 292 outlet~;
 #X obj 105 292 outlet~;
@@ -84,6 +84,8 @@ feedback. save: report current settings to last outlet.;
 #X text 685 165 delr - delay divisor right.;
 #X text 685 179 Actual delay: basedur/delr;
 #X text 662 275 bandpass pitch in midi units (0-127);
+#X obj 687 405 print;
+#X msg 677 70 save;
 #X connect 0 0 3 0;
 #X connect 1 0 0 0;
 #X connect 2 0 11 0;
@@ -93,6 +95,7 @@ feedback. save: report current settings to last outlet.;
 #X connect 8 0 6 0;
 #X connect 8 1 6 1;
 #X connect 8 2 5 0;
+#X connect 8 2 31 0;
 #X connect 9 0 1 0;
 #X connect 10 0 2 0;
 #X connect 11 0 8 2;
@@ -103,4 +106,5 @@ feedback. save: report current settings to last outlet.;
 #X connect 15 0 20 0;
 #X connect 20 0 9 0;
 #X connect 23 0 8 0;
-#X connect 23 1 8 1;
+#X connect 23 0 8 1;
+#X connect 32 0 9 0;

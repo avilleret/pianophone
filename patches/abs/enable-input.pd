@@ -1,4 +1,4 @@
-#N canvas 669 305 714 381 10;
+#N canvas 661 329 714 381 10;
 #X obj 57 312 s pd;
 #X text 490 219 without input;
 #X text 507 258 with input;
@@ -9,22 +9,21 @@
 #X obj 57 87 f;
 #X obj 201 26 inlet;
 #X obj 201 46 t b f;
-#X obj 95 312 print pd;
 #X msg 80 259 audio-dialog 2 0 0 0 2 0 0 0 2 0 0 0 2 0 0 0 48000 10
 -1 64;
 #X msg 57 219 audio-dialog 2 0 0 0 -2 0 0 0 2 0 0 0 2 0 0 0 48000 10
 -1 64;
-#X connect 3 0 7 0;
+#X obj 105 39 r enable-input;
+#X connect 3 0 7 1;
 #X connect 4 0 6 0;
 #X connect 4 1 5 0;
-#X connect 5 0 11 0;
-#X connect 6 0 12 0;
+#X connect 5 0 10 0;
+#X connect 6 0 11 0;
 #X connect 7 0 4 0;
 #X connect 8 0 9 0;
 #X connect 9 0 7 0;
 #X connect 9 1 5 1;
 #X connect 9 1 6 1;
+#X connect 10 0 0 0;
 #X connect 11 0 0 0;
-#X connect 11 0 10 0;
-#X connect 12 0 0 0;
-#X connect 12 0 10 0;
+#X connect 12 0 7 0;
