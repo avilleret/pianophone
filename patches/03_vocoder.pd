@@ -1,4 +1,4 @@
-#N canvas 577 206 847 575 10;
+#N canvas 573 218 847 575 10;
 #X declare -path abs -path rj;
 #X text 27 23 RjDj Scene Template - _main.pd;
 #X obj 76 326 e_vocoder thisvoco;
@@ -177,7 +177,6 @@
 #X text 145 216 Source of chord sound;
 #X obj 106 267 adc~;
 #X obj 73 491 dac~;
-#X obj 148 104 r syn-noteon;
 #X obj 75 164 poly 4 1;
 #X obj 75 186 pack f f f;
 #X msg 70 64 60 \$1;
@@ -192,20 +191,21 @@
 #X obj 573 101 enable-input;
 #X obj 573 83 tgl 15 1 empty empty empty 17 7 0 10 -262144 -1 -1 1
 1;
+#X obj 147 102 c_keyboard;
 #X obj 571 52 declare -path abs -path rj;
 #X connect 1 0 6 0;
 #X connect 1 0 6 1;
 #X connect 2 0 1 0;
 #X connect 5 1 1 1;
 #X connect 7 0 8 0;
-#X connect 8 0 9 0;
-#X connect 8 1 9 1;
-#X connect 8 2 9 2;
-#X connect 9 0 2 0;
-#X connect 10 0 8 0;
-#X connect 11 0 10 0;
-#X connect 12 0 13 0;
-#X connect 13 0 8 0;
-#X connect 14 0 15 0;
-#X connect 15 0 8 0;
-#X connect 17 0 16 0;
+#X connect 7 1 8 1;
+#X connect 7 2 8 2;
+#X connect 8 0 2 0;
+#X connect 9 0 7 0;
+#X connect 10 0 9 0;
+#X connect 11 0 12 0;
+#X connect 12 0 7 0;
+#X connect 13 0 14 0;
+#X connect 14 0 7 0;
+#X connect 16 0 15 0;
+#X connect 17 0 7 0;
